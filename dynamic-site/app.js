@@ -5,6 +5,12 @@ const express = require('express');
 const db = require('./data/database');
 const mainRoutes = require('./routes/main.routes');
 
+let port = 3000; // default port we use
+
+if (process.env.PORT) { // if the PORT variable exists (PORT being a built in heroku variable)
+  port = process.env.PORT; //use that instead of 3000
+}
+
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -21,7 +27,7 @@ app.use(function(error, req, res, next) {
 
 db.initDatabase()
   .then(function () {
-    app.listen(3000);
+    app.listen(port); // by default is 3000 when hosted locally, replaced with PORT and whatever it represents when it is hosted online via heroku
   })
   .catch(function (error) {
     console.log('Connecting to the database failed!');
